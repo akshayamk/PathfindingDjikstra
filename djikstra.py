@@ -54,12 +54,12 @@ class GUI:
     def drawUI(self):
         button = pygame.font.Font('freesansbold.ttf', 20)
         pygame.draw.rect(self.screen, COLOUR_WHITE, (700, 100, 50, 30))
-        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 100, 100, 30)) #for displaying correct/wrong ans
+        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 100, 100, 30)) 
         text = self.font.render("Start", 1 , COLOUR_BLACK)
         self.screen.blit(text, (705, 105))
 
         pygame.draw.rect(self.screen, COLOUR_WHITE, (700, 150, 50, 30))
-        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 150, 100, 30)) #for displaying correct/wrong ans
+        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 150, 100, 30)) 
         text = self.font.render("End", 1 , COLOUR_BLACK)
         self.screen.blit(text, (705, 155))
 
@@ -96,7 +96,7 @@ class GUI:
     
     def printstart(self, x, y):
 
-        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 100, 100, 30)) #for displaying correct/wrong ans
+        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 100, 100, 30)) 
         makestr = '(' + (str(x)) + ',' + str(y) + ')'
         text = self.font.render(makestr, 1 , COLOUR_BLACK)
         self.screen.blit(text, (855, 105))
@@ -104,7 +104,7 @@ class GUI:
         self.start = True #start position set
     
     def printend(self, x, y):
-        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 150, 100, 30)) #for displaying correct/wrong ans
+        pygame.draw.rect(self.screen, COLOUR_WHITE, (850, 150, 100, 30)) 
         makestr = '(' + (str(x)) + ',' + str(y) + ')'
         text = self.font.render(makestr, 1 , COLOUR_BLACK)
         self.screen.blit(text, (855, 155))
@@ -219,7 +219,6 @@ class djikstra:
         for row in range(ROWS):
             for col in range(ROWS):
                 node = (row, col)
-                #getneighbours.append(self.getneighbours(node))
                 getneighbours = self.getneighbours(node)
                 unseennodes[node] = getneighbours
                 graph[node] = getneighbours
@@ -227,6 +226,9 @@ class djikstra:
 
         currentnode = startnode
         visited[currentnode] = 0 #set start node weight to 0
+
+        if startnode == endnode: #if start and end node the same, print no path available on GUI
+            return track_path
 
         try:
             while unseennodes:
@@ -240,25 +242,26 @@ class djikstra:
 
             
                 
-                #increase distance of neighbours
+                #relax node weight of neighbours 
                 for neighbour in obtainneighbours:
                     if neighbour not in visited and neighbour not in obstructions:
-                        visited[neighbour] = visited[currentnode] + 1 #increment weight of neighbours
+                        visited[neighbour] = visited[currentnode] + 1 #increment weight of neighbours with respect to current node 
                 
                 
                 unseennodes.pop(currentnode)
 
                 for node, weight in visited.items():
                     if node in unseennodes:
-                        currentnode = node
+                        currentnode = node #get next nearest node for next iteration
                         break
 
-            #distance += 1
         except KeyError:
             #print("no path possible")
+            #problem occured when finding for neighbours as they are obstruction coordinates
             return track_path
         
         #get path
+        #backtracking from end node to start node
         weight = visited[endnode]
         track_path.append(endnode)
         checknode = endnode
@@ -270,7 +273,7 @@ class djikstra:
                 if visited[node] == weight:
                     temp[node] = weight
             for node in temp.keys():
-                if self.checkdistance(node, checknode): #backtracking from end node to start node
+                if self.checkdistance(node, checknode): #check if node to add is next nearest node to form path
                     track_path.append(node)
                     checknode = node
                     break
@@ -302,10 +305,8 @@ while True:
                 if 700 <= x <= 850 and 250 <= y <= 280:
                     g.clearUI()
                 if 700 <= x <= 850 and 200 <= y <= 230:
-                    #map button; link to algorithm
                     path = d.algorithm(g.getstartnode(), g.getendnode(), g.getobstructions())
                     p.printpath(path)
-                    #print(path)
 
     pygame.display.update()
 
