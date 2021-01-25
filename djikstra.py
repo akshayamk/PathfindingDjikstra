@@ -201,9 +201,9 @@ class djikstra:
     def algorithm(self, start, end, obstructions):
         #initialise
         unseennodes = {}
-        graph = {}
+        #graph = {}
         visited = {}
-        graph.clear()
+        #graph.clear()
         visited.clear()
         unseennodes.clear()
         getneighbours = {}
@@ -221,7 +221,7 @@ class djikstra:
                 node = (row, col)
                 getneighbours = self.getneighbours(node)
                 unseennodes[node] = getneighbours
-                graph[node] = getneighbours
+                #graph[node] = getneighbours
         
 
         currentnode = startnode
