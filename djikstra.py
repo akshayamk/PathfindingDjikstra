@@ -305,8 +305,12 @@ while True:
                 if 700 <= x <= 850 and 250 <= y <= 280:
                     g.clearUI()
                 if 700 <= x <= 850 and 200 <= y <= 230:
-                    path = d.algorithm(g.getstartnode(), g.getendnode(), g.getobstructions())
-                    p.printpath(path)
+                    try:
+                        path = d.algorithm(g.getstartnode(), g.getendnode(), g.getobstructions())
+                        p.printpath(path)
+                    except:
+                        path.clear()
+                        p.printpath(path)
 
     pygame.display.update()
 
